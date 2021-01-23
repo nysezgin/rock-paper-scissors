@@ -1,28 +1,268 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&display=swap");
+
+//// Mixins
+
+@mixin mobile-m {
+  @media only screen and (min-width: 375px) {
+    @content;
+  }
+}
+
+@mixin mobile-l {
+  @media only screen and (min-width: 425px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media only screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media only screen and (min-width: 1024px) {
+    @content;
+  }
+}
 
 //// Colors
 
-$scissors-gradient: linear-gradient( hsl(39, 89%, 49%), hsl(40, 84%, 53%));
-$paper-gradient: linear-gradient( hsl(230, 89%, 62%), hsl(230, 89%, 65%));
-$rock-gradient: linear-gradient( hsl(349, 71%, 52%), hsl(349, 70%, 56%));
+$scissors-gradient: linear-gradient(hsl(39, 100%, 54%), hsl(40, 75%, 33%));
+$paper-gradient: linear-gradient(hsl(230, 100%, 65%), hsl(230, 49%, 41%));
+$rock-gradient: linear-gradient(hsl(349, 95%, 60%), hsl(349, 56%, 40%));
 
 // Neutral;
 
 $dark-text: hsl(229, 25%, 31%);
-$score-text: hsl(229, 64%, 46%);
-$header-outline: hsl(217, 16%, 45%);
+$score-title: hsl(229, 64%, 46%);
+$border-outline: hsl(217, 16%, 45%);
 
 // Background;
 
-$radial-gradient: linear-gradient( hsl(214, 47%, 23%), hsl(237, 49%, 15%));
+$background-gradient: linear-gradient(hsl(214, 47%, 23%), hsl(237, 49%, 15%));
+
+// Other Variables
+
+$big-content-width: 85%;
+$box-border: 3px solid $border-outline;
+$big-font-size: 1.5rem;
+
+//// Extends
+
+%box {
+  display: grid;
+  align-items: center;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+%button-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
 
 //// General
 
-html {
+html,
+body {
   height: 100%;
+  width: 100%;
 }
 
-body {
+#root {
+  padding: 30px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   min-height: 100%;
-  font-family: 'Barlow Semi Condensed', sans-serif;
+  background-image: $background-gradient;
+  font-family: "Barlow Semi Condensed", sans-serif;
+}
+
+//// Header
+
+header {
+  @extend %box;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  width: $big-content-width;
+  max-width: 700px;
+  border: $box-border;
+  z-index: 9;
+}
+
+.title {
+  color: white;
+  padding: 10px;
+  line-height: 0.85;
+  font-size: $big-font-size;
+}
+
+.score {
+  @extend %box;
+  justify-items: center;
+  background-color: white;
+  width: 100px;
+  line-height: 1;
+
+  &__title {
+    color: $score-title;
+  }
+
+  &__counter {
+    font-size: 3rem;
+    font-weight: 700;
+    color: $dark-text;
+  }
+}
+
+//// Main
+
+main {
+  width: $big-content-width;
+}
+
+// Game
+
+.game {
+  margin: 20px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 360px;
+
+  @include mobile-m {
+    row-gap: 20px;
+  }
+
+  @include mobile-l {
+    row-gap: 40px;
+  }
+
+  &__button {
+    height: 130px;
+    width: 130px;
+    @extend %button-box;
+    box-shadow: inset 3px -4px 2px 0 rgba(0, 0, 0, 0.3);
+    z-index: 9;
+
+    &--rock {
+      background-image: $rock-gradient;
+    }
+
+    &--paper {
+      background-image: $paper-gradient;
+      justify-self: end;
+    }
+
+    &--scissors {
+      background-image: $scissors-gradient;
+      grid-column: 1 / span 2;
+      justify-self: center;
+    }
+  }
+
+  &__image-wrapper {
+    @extend %button-box;
+    background-color: rgb(226, 226, 226);
+    box-shadow: inset -3px 4px 2px 2px rgba(0, 0, 0, 0.2);
+    height: 100px;
+    width: 100px;
+  }
+
+  &__canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+
+  &__line {
+    stroke: $dark-text;
+    stroke-width: 20;
+  }
+}
+
+// Footer
+
+footer {
+  z-index: 9;
+}
+
+.rules {
+  @extend %box;
+  justify-content: center;
+  border: $box-border;
+  width: 150px;
+
+  &__title {
+    color: rgb(214, 211, 211);
+    font-size: $big-font-size;
+  }
+}
+
+.rules-modal {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+  &--visible {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &__panel {
+    @extend %box;
+    grid-template-columns: auto auto;
+    row-gap: 30px;
+    padding: 30px;
+    background-color: white;
+    width: 80%;
+    max-width: 700px;
+    font-size: $big-font-size;
+    font-weight: 700;
+  }
+
+  &__close-button {
+    justify-self: end;
+    height: 20px;
+    width: 20px;
+    background: url("./components/images/icon-close.svg");
+    background-size: cover;
+  }
+
+  &__info-image {
+    grid-column: 1 / span 2;
+    width: 100%;
+  }
+}
+
+//// Custom Scrollbar
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #000000;
 }

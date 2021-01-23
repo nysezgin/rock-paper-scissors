@@ -14,8 +14,10 @@ function App() {
       </header>
       <main>
         <Game />
-        <Rules />
       </main>
+      <footer>
+        <Rules />
+      </footer>
     </>
   );
 }
