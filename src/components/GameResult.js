@@ -18,7 +18,10 @@ export default function GameResult({
       <div className="game__picked">
         <button
           className={
-            "game__button game__button--inactive game__button--" + choice
+            result === "YOU WIN!"
+              ? "game__button game__button--inactive game__button--win game__button--" +
+                choice
+              : "game__button game__button--inactive game__button--" + choice
           }
         >
           <GameButton
@@ -38,8 +41,11 @@ export default function GameResult({
       <div className="game__picked">
         <button
           className={
-            "game__button game__button--inactive game__button--right game__button--" +
-            homeChoice
+            result === "YOU LOSE!"
+              ? "game__button game__button--inactive game__button--win game__button--right game__button--" +
+                homeChoice
+              : "game__button game__button--inactive game__button--right game__button--" +
+                homeChoice
           }
         >
           <GameButton

@@ -182,11 +182,11 @@ main {
     &--paper {
       background-image: $paper-gradient;
     }
-    
+
     &--scissors {
       background-image: $scissors-gradient;
     }
-    
+
     &--right {
       justify-self: end;
     }
@@ -200,6 +200,12 @@ main {
       cursor: default;
       pointer-events: none;
     }
+
+      box-shadow: rgba(255, 217, 0, 0) 0px 0px 17px 4px;
+    &--win {
+      box-shadow: rgba(255, 217, 0, 0.7) 0px 0px 17px 4px;
+      transition: all 3s ease;
+      }
   }
 
   &__image-wrapper {
@@ -238,9 +244,9 @@ main {
 
     &--active {
       transform: translateX(-100%);
-    opacity: 1;
+      opacity: 1;
     }
-  
+
     &-info {
       grid-column: 1 / span 2;
       display: flex;
