@@ -8,36 +8,8 @@ export default function GameResult({
   paperImg,
   scissorsImg,
   handleChoice,
-  handleScore,
+  result,
 }) {
-  const winMessage = "YOU WIN!";
-  const loseMessage = "YOU LOSE!";
-  const drawMessage = "DRAW!";
-  const handleResult = () => {
-    if (choice === homeChoice) {
-      return drawMessage;
-    } else if (choice === "rock") {
-      if (homeChoice === "scissors") {
-        return winMessage;
-      } else if (homeChoice === "paper") {
-        return loseMessage;
-      }
-    } else if (choice === "paper") {
-      if (homeChoice === "rock") {
-        return winMessage;
-      } else if (homeChoice === "scissors") {
-        return loseMessage;
-      }
-    } else if (choice === "scissors") {
-      if (homeChoice === "paper") {
-        return winMessage;
-      } else if (homeChoice === "rock") {
-        return loseMessage;
-      }
-    } else {
-      return "ERROR";
-    }
-  };
 
   return (
     <div
@@ -87,7 +59,7 @@ export default function GameResult({
         </p>
       </div>
       <div className="game__result-info">
-        {handleResult()}
+        {result}
         <button
           className="game__result-button"
           name="play-again"

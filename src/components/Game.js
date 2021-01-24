@@ -5,7 +5,14 @@ import scissorsImg from "./images/icon-scissors.svg";
 import GameButton from "./GameButton";
 import GameResult from "./GameResult";
 
-export default function Game({handleScore}) {
+export default function Game({ handleScore }) {
+  //// Handle Result
+  const [result, setResult] = useState("");
+  const winMessage = "YOU WIN!";
+  const loseMessage = "YOU LOSE!";
+  const drawMessage = "DRAW!";
+  const errorMessage = "ERROR";
+
   //// Handle Choice
   const [choice, setChoice] = useState("");
 
@@ -14,22 +21,64 @@ export default function Game({handleScore}) {
   };
 
   // Handle Home Choice
-    const [homeChoice, setHomeChoice] = useState("");
-    const getRandomInt = () => {
-      return Math.floor(Math.random() * 3);
-    };
-    useEffect(() => {
-      const randomInt = getRandomInt();
-      let newHomeChoice = "";
-      if (randomInt === 0) {
-        newHomeChoice = "rock";
-      } else if (randomInt === 1) {
-        newHomeChoice = "paper";
-      } else if (randomInt === 2) {
-        newHomeChoice = "scissors";
+  const [homeChoice, setHomeChoice] = useState("");
+  const getRandomInt = () => {
+    return Math.floor(Math.random() * 3);
+  };
+  const handleHomeChoice = (homeChoice) => {
+    setHomeChoice(homeChoice);
+  };
+
+  useEffect(() => {
+    const randomInt = getRandomInt();
+    let newHomeChoice = "";
+    if (randomInt === 0) {
+      newHomeChoice = "rock";
+    } else if (randomInt === 1) {
+      newHomeChoice = "paper";
+    } else if (randomInt === 2) {
+      newHomeChoice = "scissors";
+    }
+    handleHomeChoice(newHomeChoice);
+
+    if (choice === homeChoice) {
+      setResult(drawMessage);
+    } else if (choice === "rock") {
+      if (homeChoice === "scissors") {
+        setResult(winMessage);
+      } else if (homeChoice === "paper") {
+        setResult(loseMessage);
       }
-      setHomeChoice(newHomeChoice);
-    }, [choice]);
+    } else if (choice === "paper") {
+      if (homeChoice === "rock") {
+        setResult(winMessage);
+      } else if (homeChoice === "scissors") {
+        setResult(loseMessage);
+      }
+    } else if (choice === "scissors") {
+      if (homeChoice === "paper") {
+        setResult(winMessage);
+      } else if (homeChoice === "rock") {
+        setResult(loseMessage);
+      }
+    } else {
+      setResult(errorMessage);
+    }
+    console.log(result)
+
+    return () => {
+      handleHomeChoice("");
+    };
+  }, [choice, homeChoice, result]);
+
+  useEffect(() => {
+    if (result === winMessage) {
+      handleScore("win");
+    } else if (result === loseMessage) {
+      handleScore("lose");
+    }
+    
+  }, [result])
 
   //// Button Coordinates
   const [coordinates, setCoordinates] = useState({});
@@ -42,9 +91,11 @@ export default function Game({handleScore}) {
 
   // Handle Coordinates (object center)
   const handleCoordinates = () => {
-    const marginX = (window.innerWidth - gameRef.current.getBoundingClientRect().width) / 2; // halved for correct positioning
+    const marginX =
+      (window.innerWidth - gameRef.current.getBoundingClientRect().width) / 2; // halved for correct positioning
     const rockX =
-      rockRef.current.getBoundingClientRect().left - marginX +
+      rockRef.current.getBoundingClientRect().left -
+      marginX +
       rockRef.current.getBoundingClientRect().width / 2;
     const rockY =
       rockRef.current.getBoundingClientRect().bottom -
@@ -54,8 +105,8 @@ export default function Game({handleScore}) {
       marginX +
       paperRef.current.getBoundingClientRect().width / 2;
     const paperY =
-    paperRef.current.getBoundingClientRect().bottom -
-    paperRef.current.getBoundingClientRect().height / 2;
+      paperRef.current.getBoundingClientRect().bottom -
+      paperRef.current.getBoundingClientRect().height / 2;
     const scissorsX =
       scissorsRef.current.getBoundingClientRect().left -
       marginX +
@@ -78,6 +129,7 @@ export default function Game({handleScore}) {
     window.addEventListener("resize", handleCoordinates);
     handleCoordinates();
   }, []);
+
   return (
     <div ref={gameRef} className="game">
       <svg
@@ -153,7 +205,8 @@ export default function Game({handleScore}) {
         paperImg={paperImg}
         scissorsImg={scissorsImg}
         handleChoice={handleChoice}
-        handleScore={handleScore}
+        handleHomeChoice={handleHomeChoice}
+        result={result}
       />
     </div>
   );
