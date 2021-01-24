@@ -2,13 +2,13 @@ import React from "react";
 import GameButton from "./GameButton";
 
 export default function GameResult({
-  choice,
-  homeChoice,
   rockImg,
   paperImg,
   scissorsImg,
-  handleChoice,
+  choice,
+  homeChoice,
   result,
+  resetGame,
 }) {
 
   return (
@@ -63,7 +63,7 @@ export default function GameResult({
         <button
           className="game__result-button"
           name="play-again"
-          onClick={() => handleChoice("")}
+          onClick={() => resetGame()}
         >
           PLAY AGAIN
         </button>

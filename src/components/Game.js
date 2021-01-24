@@ -5,81 +5,7 @@ import scissorsImg from "./images/icon-scissors.svg";
 import GameButton from "./GameButton";
 import GameResult from "./GameResult";
 
-export default function Game({ handleScore }) {
-  //// Handle Result
-  const [result, setResult] = useState("");
-  const winMessage = "YOU WIN!";
-  const loseMessage = "YOU LOSE!";
-  const drawMessage = "DRAW!";
-  const errorMessage = "ERROR";
-
-  //// Handle Choice
-  const [choice, setChoice] = useState("");
-
-  const handleChoice = (playerChoice) => {
-    setChoice(playerChoice);
-  };
-
-  // Handle Home Choice
-  const [homeChoice, setHomeChoice] = useState("");
-  const getRandomInt = () => {
-    return Math.floor(Math.random() * 3);
-  };
-  const handleHomeChoice = (homeChoice) => {
-    setHomeChoice(homeChoice);
-  };
-
-  useEffect(() => {
-    const randomInt = getRandomInt();
-    let newHomeChoice = "";
-    if (randomInt === 0) {
-      newHomeChoice = "rock";
-    } else if (randomInt === 1) {
-      newHomeChoice = "paper";
-    } else if (randomInt === 2) {
-      newHomeChoice = "scissors";
-    }
-    handleHomeChoice(newHomeChoice);
-
-    if (choice === homeChoice) {
-      setResult(drawMessage);
-    } else if (choice === "rock") {
-      if (homeChoice === "scissors") {
-        setResult(winMessage);
-      } else if (homeChoice === "paper") {
-        setResult(loseMessage);
-      }
-    } else if (choice === "paper") {
-      if (homeChoice === "rock") {
-        setResult(winMessage);
-      } else if (homeChoice === "scissors") {
-        setResult(loseMessage);
-      }
-    } else if (choice === "scissors") {
-      if (homeChoice === "paper") {
-        setResult(winMessage);
-      } else if (homeChoice === "rock") {
-        setResult(loseMessage);
-      }
-    } else {
-      setResult(errorMessage);
-    }
-    console.log(result)
-
-    return () => {
-      handleHomeChoice("");
-    };
-  }, [choice, homeChoice, result]);
-
-  useEffect(() => {
-    if (result === winMessage) {
-      handleScore("win");
-    } else if (result === loseMessage) {
-      handleScore("lose");
-    }
-    
-  }, [result])
-
+export default function Game({ choice, homeChoice, result, handleGameData, resetGame }) {
   //// Button Coordinates
   const [coordinates, setCoordinates] = useState({});
 
@@ -171,7 +97,7 @@ export default function Game({ handleScore }) {
               ? "game__button game__button--rock game__button--inactive"
               : "game__button game__button--rock"
           }
-          onClick={() => handleChoice("rock")}
+          onClick={() => handleGameData("rock")}
         >
           <GameButton img={rockImg} />
         </button>
@@ -182,7 +108,7 @@ export default function Game({ handleScore }) {
               ? "game__button game__button--paper game__button--right game__button--inactive"
               : "game__button game__button--right game__button--paper"
           }
-          onClick={() => handleChoice("paper")}
+          onClick={() => handleGameData("paper")}
         >
           <GameButton img={paperImg} />
         </button>
@@ -193,20 +119,19 @@ export default function Game({ handleScore }) {
               ? "game__button game__button--bottom game__button--scissors game__button--inactive"
               : "game__button game__button--bottom game__button--scissors"
           }
-          onClick={() => handleChoice("scissors")}
+          onClick={() => handleGameData("scissors")}
         >
           <GameButton img={scissorsImg} />
         </button>
       </div>
       <GameResult
-        choice={choice}
-        homeChoice={homeChoice}
         rockImg={rockImg}
         paperImg={paperImg}
         scissorsImg={scissorsImg}
-        handleChoice={handleChoice}
-        handleHomeChoice={handleHomeChoice}
+        choice={choice}
+        homeChoice={homeChoice}
         result={result}
+        resetGame={resetGame}
       />
     </div>
   );

@@ -145,7 +145,7 @@ main {
 .game {
   display: grid;
   grid-template-columns: 100% 100%;
-  // overflow: hidden;
+  overflow: hidden;
   max-width: $game-max-width;
   margin: 0 auto;
   height: 100%;
@@ -154,6 +154,7 @@ main {
   &__interface {
     @extend %game-box;
     @extend %hide-interface;
+    height: 350px;
 
     &--active {
       transform: translateX(0);
@@ -233,7 +234,7 @@ main {
     color: white;
     justify-items: center;
     row-gap: 20px;
-    // opacity: 0;
+    opacity: 0;
 
     &--active {
       transform: translateX(-100%);
